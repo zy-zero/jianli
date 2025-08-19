@@ -14,6 +14,7 @@
 
       .resume-container {
         width: 820px;
+        max-width: 100%;
         margin: 30px auto;
         border: 1px solid #ddd;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -35,6 +36,12 @@
         width: 70%;
       }
 
+      .basic-1,
+      .basic-2 {
+        display: flex;
+        justify-content: space-between;
+      }
+
       .basic-info {
         font-size: 14px;
         margin-top: 5px;
@@ -52,6 +59,22 @@
         top: 10px;
       }
 
+      @media (max-width: 480px) {
+        .avatar {
+          width: 146px;
+          height: 146px;
+        }
+        .basic-1,
+        .basic-2 {
+          display: flex;
+          justify-content: flex-start;
+          flex-wrap: wrap;
+        }
+        .basic-1 div,
+        .basic-2 div {
+          width: 100%;
+        }
+      }
       .section {
         padding: 20px;
         border-bottom: 1px solid #ddd;
@@ -119,20 +142,14 @@
           <div class="basic-info" style="font-size: 24px; margin-bottom: 12px">
             张渝
           </div>
-          <div
-            class="basic-info"
-            style="display: flex; justify-content: space-between"
-          >
+          <div class="basic-info basic-1">
             <div class="phone">电话: 18696796973</div>
             <div class="email">邮箱: 1083427099@qq.com</div>
             <div class="address">城市: 重庆</div>
             <div class="age">年龄: 31</div>
             <div class="gender">性别：男</div>
           </div>
-          <div
-            class="basic-info"
-            style="display: flex; justify-content: space-between"
-          >
+          <div class="basic-info basic-2">
             <div class="office">
               期望职位: .net后端开发工程师 / 前端开发工程师
             </div>
@@ -166,7 +183,7 @@
             <span>重庆诺怀软件有限公司</span>
             <span>开发/项目经理</span>
           </div>
-          <div class="item-content" style="margin-top: 20px;">
+          <div class="item-content" style="margin-top: 20px">
             <div style="font-weight: bold">开发工作</div>
             <ul>
               <li>
