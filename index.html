@@ -175,7 +175,6 @@
           <span>重庆交通大学</span>
           <span>通信工程（本科）</span>
         </div>
-
       </div>
     </div>
 
@@ -184,8 +183,8 @@
       <div class="section-title">技能特长</div>
       <div class="item-content">
         <p>
-          从事软件开发9年，期间做项目经理2年，参与了10多个电商项目的前后端开发，一个风险评估软件开发，雷蛇直播打赏项目开发，其他管理系统或者定制项目开发等，有<strong>丰富的.net后端（MVC和web API）开发经验和前端开发经验</strong>。精通<strong>.net, .net core, ef
-            core</strong>相关技术，<strong>sql server, mysql,
+          从事软件开发9年，期间做项目经理2年，参与了10多个电商项目的前后端开发，一个风险评估软件开发，雷蛇直播打赏项目开发，其他管理系统或者定制项目开发等，有<strong>丰富的.net后端（MVC和web
+            API）开发经验和前端开发经验</strong>。精通<strong>.net, .net core, ef core</strong>相关技术，<strong>sql server, mysql,
             postgresql</strong>，精通<strong>reactjs</strong>相关技术。熟悉node.js 相关技术。
         </p>
         <ul>
@@ -194,15 +193,13 @@
             <span style="font-weight: bold">C#</span>, .net core,
             <span style="font-weight: bold">.net MVC</span>,
             <span style="font-weight: bold">.net web API</span>,
-            <span style="font-weight: bold">sql server, mysql, postgresql</span>,
-            html, css,
-            javascript, <span style="font-weight: bold">react</span>等。
+            <span style="font-weight: bold">sql server, mysql, postgresql</span>, html, css, javascript,
+            <span style="font-weight: bold">react</span>等。
           </li>
           <li>
             <span style="font-weight: bold">团队能力：</span>具有良好的项目管理与协调经验。
           </li>
         </ul>
-
       </div>
     </div>
 
@@ -232,9 +229,7 @@
               </p>
             </li>
             <li>
-              <p>
-                QMS风险管理项目
-              </p>
+              <p>QMS风险管理项目</p>
               <p>
                 主要<strong>使用.net core + ABP.Core框架 +
                   postgresql搭建后端，前端使用react搭建</strong>；
@@ -244,33 +239,53 @@
               </p>
               <p>
                 项目中excel
-                table中后端缓存加载10多万行，200多万个单元格的数据，会出现性能问题；
+                table中后端缓存加载10多万行，200多万个单元格的数据，会出现性能问题：
               </p>
-              <p>
-                <strong>一、查询数据库优化</strong>，在项目中.net core + EF
-                core
-                查询数据库的时候，使用linq语句写得代码会生成很多不必要的子查询，先是优化了一部分这些子查询的linq语句，以及适当分页会减少部分查询时间。
-              </p>
-              <p>
-                <strong>二、代码问题</strong>，项目中使用了比较多的循环语句去组装缓存数据，查询出来的数据全部都是用List这个类去组装的，这里适当的修改为Dictionary类或者是HashSet类，减少List类的使用，会提升较大性能，减少空间复杂度。
-              </p>
-              <p>
-                <strong>三、适当使用并行计算</strong>，部分较大的非异步代码，可以使用并行计算去充分利用CPU的多核心能力，去减少循环里面的耗时（需要注意的是，并行计算里面，不要使用List类这些非线程安全的数据的修改）。
-              </p>
+              <ul>
+                <li>
+                  <strong>一、数据库结构和查询优化</strong>，在项目中.net core + EF
+                  core
+                  查询数据库的时候，使用linq语句写得代码会生成很多不必要的子查询，优化一部分这些子查询的linq语句，把不需要使用到的字段去掉，以及适当的分页调整会减少部分查询时间。
+                  检查发现一些必要字段的索引没有加上，尤其是chain表和相关的表，这个加上后发现查询快了10倍左右。
+                </li>
+                <li>
+                  <strong>二、代码问题</strong>，项目中使用了比较多的循环语句去组装缓存数据，查询出来的数据全部都是用List这个类去组装的，这里适当的修改为Dictionary类或者是HashSet类，减少List类的使用，会提升较大性能，减少空间复杂度。这个修改后，快了5-10倍。
+                </li>
+                <li>
+                  <strong>三、适当使用并行计算</strong>，部分较大的非异步代码，可以使用并行计算去充分利用CPU的多核心能力，去减少循环里面的耗时（需要注意的是，并行计算里面，不要使用List类这些非线程安全的数据的修改）。
+                </li>
+                <li>以上三个调整后，整个加载200万+的数据到缓存中的速度，<strong>从之前的20分钟都出不来</strong>，<strong>变成了13-19s</strong>，是一个比较大的提升。</li>
+              </ul>
               <p>
                 <strong>前端使用handsontalbe做excel table的显示</strong>，由于最开始的技术选型，handsontable自身的一些性能限制，前端在合并单元格（merge
-                cell）比较多的时候也有部分性能问题。
+                cell）比较多的时候也有部分性能问题：
+              </p>
+              <ul>
+                <li>
+                  <strong>一、dom元素过多</strong>
+                  handsontable如果是单纯的渲染每个单元格，然后去简单编辑，是不会产生较大问题的。由于项目对每个单元格的渲染都做了自定义，在每次去更新数据或者是触发handsontable自身的重绘逻辑的时候，merge
+                  cell带来的性能问题会放大。
+                  <p>
+                    handsontable本身支持虚拟渲染，但是merge
+                    cell如果存在超出屏幕的行数，比如渲染30行，但是merge
+                    100行数据，他会将这100行数据都进行渲染，所以导致虚拟dom实际上没有起效果，由于渲染和计算了比较多的单元格（dom），页面会非常卡。<br />
+                  </p>
+                </li>
+                <li>
+                  <strong>二、javascript本身的性能瓶颈</strong>
+                  上述例子中，当有10万+的行，200万+的单元格渲染的时候，去计算单元格合并的时候，由于项目内部的一些业务逻辑，导致计算合并变得比较负责，这种百万级的数据在前端代码里面会接触到javascript的性能瓶颈，计算会非常的耗时。
+                  由于业务逻辑基本上改动不大，提升基本没有。所以需要找其他方式解决。
+                </li>
+              </ul>
+              <p>
+                解决方案是<strong>只去计算和渲染屏幕第一行到屏幕下方几行的数据的单元格合并</strong>，当用户上下滚动的时候，需要重新去计算屏幕内的数据，并重新渲染合并的单元格。
               </p>
               <p>
-                handsontable如果是单纯的渲染每个单元格，然后去简单编辑，是不会产生较大问题的。由于我们项目对每个单元格的渲染都做了自定义，在每次去更新数据或者是触发handsontable自身的重绘逻辑的时候，merge
-                cell带来的性能问题会放大。
-              </p>
-              <p>
-                handsontable本身支持虚拟渲染，但是merge
-                cell如果存在超出屏幕的行数，比如渲染30行，但是merge
-                100行数据，他会将这100行数据都进行渲染，所以导致虚拟dom实际上没有起效果，由于渲染和计算了比较多的单元格（dom），页面会非常卡。另外一个问题是，当我们存在几万行数据大量单元格需要去计算合并的时候，js的性能瓶颈也会出现。<br />
-                解决方案是我们<strong>只去计算和渲染屏幕第一行到屏幕下方几行的数据的单元格合并</strong>，当用户上下滚动的时候，需要重新去计算屏幕内的数据，并重新渲染合并的单元格。另外就是行高的限制，如果不限制行高，merge
-                cell也会出现一些问题，解决方案<strong>固定行高</strong>，用户可以用按钮去控制最大行高，默认200px。
+                <strong>行高带来的其他问题</strong>
+                handsontable v12.x
+                这个版本中，如果使用自动行高，会导致一些其他的问题，比如右键菜单无法点出，无法滚动行，无法获取正确的行数之类的bug。<br />
+                解决方案<strong>固定行高</strong>，用户可以用按钮去控制最大行高为200px，默认100px。
+                还可以使用一些特定的行高，比如用下拉框，让用户选择行高，100、200、400等。由于项目特定的需求，这个方案没有被采用。
               </p>
             </li>
             <li>
@@ -333,21 +348,18 @@
             <li>
               工作内容主要是前期负责项目需求对接，明细项目需求，拆分需求点，根据需求点按照公司规定给客户一个大致报价；中后期持续跟进项目进度，同客户持续沟通项目需求的变化、改进等；按需分配内部开发人员的工作任务，持续跟进开发进度等。从雷蛇直播打赏项目开始，持续在公司负责沟通部分项目的报价，开发和管理等工作。
             </li>
-            <li>
-              期间雷蛇打赏项目，Try on Glasses
-              项目，新加坡客户Nemo项目，华宇集团内部管理系统部分项目，带团队出差博腾、成都等驻场开发。Todd的各个电商项目报价等。
-            </li>
+            <li>雷蛇打赏项目需求对接和整理，分配和管理开发任务和报价等。</li>
             <li>
               Try on Glasses
               项目和新加坡客户Nemo项目，负责沟通项目需求和拆分，理清客户需求，分配项目任务，解决部分技术问题等。
             </li>
             <li>华语内部管理系统的需求对接，原型设计，报价等。</li>
+            <li>带团队出差博腾、成都等驻场开发。</li>
             <li>公司部分电商项目（Todd客户，Alex客户等）需求整理、报价等</li>
           </ul>
         </div>
       </div>
     </div>
-
 
     <!-- 荣誉证书 -->
     <div class="section">
